@@ -20,8 +20,8 @@ namespace EPStoredP.Repositories
         public async Task<IEnumerable<Product>> GetProductByIdAsync(int ProductId)
         {
             var param = new SqlParameter("@ProductId", ProductId);
-            var productDetails = await Task.Run(() => _dbContext.Product
-                            .FromSqlRaw(@"exec GetPrductByID @ProductId", param).ToListAsync());
+            var productDetails = await  _dbContext.Product
+                            .FromSqlRaw(@"exec GetPrductByID @ProductId", param).ToListAsync();
             return productDetails;
         }
         public async Task<int> AddProductAsync(Product product)
@@ -31,8 +31,8 @@ namespace EPStoredP.Repositories
             parameter.Add(new SqlParameter("@ProductDescription", product.ProductDescription));
             parameter.Add(new SqlParameter("@ProductPrice", product.ProductPrice));
             parameter.Add(new SqlParameter("@ProductStock", product.ProductStock));
-            var result = await Task.Run(() => _dbContext.Database
-           .ExecuteSqlRawAsync(@"exec AddNewProduct @ProductName, @ProductDescription, @ProductPrice, @ProductStock", parameter.ToArray()));
+            var result = await  _dbContext.Database
+           .ExecuteSqlRawAsync(@"exec AddNewProduct @ProductName, @ProductDescription, @ProductPrice, @ProductStock", parameter.ToArray());
             return result;
         }
         public async Task<int> UpdateProductAsync(Product product)
@@ -43,8 +43,8 @@ namespace EPStoredP.Repositories
             parameter.Add(new SqlParameter("@ProductDescription", product.ProductDescription));
             parameter.Add(new SqlParameter("@ProductPrice", product.ProductPrice));
             parameter.Add(new SqlParameter("@ProductStock", product.ProductStock));
-            var result = await Task.Run(() => _dbContext.Database
-            .ExecuteSqlRawAsync(@"exec UpdateProduct @ProductId, @ProductName, @ProductDescription, @ProductPrice, @ProductStock", parameter.ToArray()));
+            var result = await _dbContext.Database
+            .ExecuteSqlRawAsync(@"exec UpdateProduct @ProductId, @ProductName, @ProductDescription, @ProductPrice, @ProductStock", parameter.ToArray());
             return result;
         }
         public async Task<int> DeleteProductAsync(int productId)

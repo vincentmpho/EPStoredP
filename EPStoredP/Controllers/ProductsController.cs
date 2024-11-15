@@ -73,12 +73,16 @@ namespace EPStoredP.Controllers
         [HttpPut("updateproduct")]
         public async Task<IActionResult> UpdateProductAsync(Product product)
         {
-            if (product == null)
-            {
-                return StatusCode(StatusCodes.Status400BadRequest, "Invalid product ");
-            }
+           
             try
             {
+
+                if (product != null)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, "Invalid product ");
+                }
+
+
                 var result = await productService.UpdateProductAsync(product);
                 return StatusCode (StatusCodes.Status200OK, "Product updated successfully");
                

@@ -41,7 +41,6 @@ namespace EPStoredP.Controllers
                    return StatusCode(StatusCodes.Status404NotFound, new { Message = $"Product with ID {Id} not found." });
                 }
 
-                //return Ok(response);
                 return StatusCode(StatusCodes.Status200OK, response);
             }
             catch (Exception ex)
@@ -95,14 +94,12 @@ namespace EPStoredP.Controllers
         {
             try
             {
-                //var response = await productService.DeleteProductAsync(Id);
-                //return StatusCode(StatusCodes.Status200OK, response);
-
+          
                 var productToDelete = await productService.DeleteProductAsync(id);
 
                 if (productToDelete != null)
                 {
-                    //eturn await employeeRepository.DeleteEmployee(id);
+
                     return NotFound($"product with Id = {id} not found");
                 }
                     return StatusCode(StatusCodes.Status200OK, productToDelete);

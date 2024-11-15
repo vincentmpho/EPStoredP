@@ -47,9 +47,9 @@ namespace EPStoredP.Repositories
             .ExecuteSqlRawAsync(@"exec UpdateProduct @ProductId, @ProductName, @ProductDescription, @ProductPrice, @ProductStock", parameter.ToArray()));
             return result;
         }
-        public async Task<int> DeleteProductAsync(int ProductId)
+        public async Task<int> DeleteProductAsync(int productId)
         {
-            return await Task.Run(() => _dbContext.Database.ExecuteSqlInterpolatedAsync($"DeletePrductByID {ProductId}"));
+            return await _dbContext.Database.ExecuteSqlInterpolatedAsync($"EXEC DeletePrductByID {productId}");
         }
     }
 }

@@ -102,30 +102,26 @@ namespace EPStoredP.Controllers
         }
 
 
-            [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteProductAsync(int id)
         {
             try
             {
-
+             
                 var productToDelete = await productService.DeleteProductAsync(id);
 
-                if (productToDelete != null)
+                if (productToDelete == 0)
                 {
-
                     return NotFound(new { Message = $"Product with Id = {id} does not exist." });
                 }
-                return StatusCode(StatusCodes.Status200OK, productToDelete);
 
+                return StatusCode(StatusCodes.Status200OK, new { Message = $"Product with Id = {id} was successfully deleted.", DeletedProduct = id });
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "An error occurred while retrieving the product. Please try again later." });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "An error occurred while deleting the product. Please try again later." });
             }
         }
-
-
-
     }
 }

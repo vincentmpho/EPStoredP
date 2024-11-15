@@ -70,16 +70,23 @@ namespace EPStoredP.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "An error occurred while retrieving the product. Please try again later." });
             }
         }
-        [HttpPut("updateproduct")]
-        public async Task<IActionResult> UpdateProductAsync(Product product)
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateProductAsync(int id, Product product)
         {
            
             try
             {
-
-                if (product != null)
+                if (id != product.ProductId)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, "Invalid product ");
+                    return StatusCode(StatusCodes.Status400BadRequest, "Product Id Mismatch");
+                }
+
+                var productToUpdate  = await productService.GetProductByIdAsync(id);
+
+                if (productToUpdate == null)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, $"Product with Id ={id} not found");
                 }
 
 
@@ -93,21 +100,47 @@ namespace EPStoredP.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "An error occurred while retrieving the product. Please try again later." });
             }
         }
-        [HttpDelete("{id:int}")]
+
+
+        //[HttpPut("{id:int}")]
+        //public async Task<ActionResult<Employee>> UpdateEmployee(int id, Employee employee)
+        //{
+        //    try
+        //    {
+        //        if (id != employee.EmployeeId)
+        //            return BadRequest("Employee ID mismatch");
+
+        //        var employeeToUpdate = await employeeRepository.GetEmployee(id);
+
+        //        if (employeeToUpdate == null)
+        //            return NotFound($"Employee with Id = {id} not found");
+
+        //        return await employeeRepository.UpdateEmployee(employee);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError,
+        //            "Error updating data");
+        //    }
+
+
+
+
+            [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteProductAsync(int id)
         {
             try
             {
-          
+
                 var productToDelete = await productService.DeleteProductAsync(id);
 
                 if (productToDelete != null)
                 {
 
-                    return NotFound($"product with Id = {id} not found");
+                    return NotFound(new { Message = $"Product with Id = {id} does not exist." });
                 }
-                    return StatusCode(StatusCodes.Status200OK, productToDelete);
-                
+                return StatusCode(StatusCodes.Status200OK, productToDelete);
+
             }
             catch (Exception ex)
             {
@@ -115,5 +148,8 @@ namespace EPStoredP.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "An error occurred while retrieving the product. Please try again later." });
             }
         }
+
+
+
     }
 }
